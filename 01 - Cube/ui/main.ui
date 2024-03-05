@@ -80,7 +80,7 @@
            <widget class="QLabel" name="objectRotateLabel">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -103,7 +103,7 @@
            <widget class="QLabel" name="objectCoordsLabel">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -162,6 +162,7 @@
            <widget class="QLabel" name="objectLabel">
             <property name="font">
              <font>
+              <pointsize>10</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -256,6 +257,7 @@
            <widget class="QLabel" name="animationLabel">
             <property name="font">
              <font>
+              <pointsize>10</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -278,7 +280,7 @@
            <widget class="QLabel" name="label">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
+              <pointsize>9</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -309,6 +311,11 @@
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="1" column="0">
            <widget class="QLabel" name="renderResolutionLabel">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
             <property name="text">
              <string>Разрешение</string>
             </property>
@@ -318,6 +325,7 @@
            <widget class="QLabel" name="renderLabel">
             <property name="font">
              <font>
+              <pointsize>10</pointsize>
               <bold>true</bold>
              </font>
             </property>
