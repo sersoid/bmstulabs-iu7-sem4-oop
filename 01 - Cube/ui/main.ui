@@ -73,85 +73,6 @@
        <property name="spacing">
         <number>0</number>
        </property>
-       <item row="3" column="0">
-        <widget class="Line" name="menuSeparator2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0">
-        <widget class="QPushButton" name="menuRenderButton">
-         <property name="text">
-          <string>Рендер</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QWidget" name="renderWidget" native="true">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="renderLabel">
-            <property name="font">
-             <font>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Рендер</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="renderCoordSystemCheck">
-            <property name="text">
-             <string>Система координат</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="renderRTCheck">
-            <property name="text">
-             <string>Реальное время</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QSpinBox" name="renderResolutionSpinBox">
-            <property name="minimum">
-             <number>64</number>
-            </property>
-            <property name="maximum">
-             <number>1024</number>
-            </property>
-            <property name="singleStep">
-             <number>64</number>
-            </property>
-            <property name="value">
-             <number>512</number>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="renderResolutionLabel">
-            <property name="text">
-             <string>Разрешение</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="Line" name="menuSeparator1">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QWidget" name="objectWidget" native="true">
          <layout class="QGridLayout" name="gridLayout_4">
@@ -308,6 +229,13 @@
          </property>
         </spacer>
        </item>
+       <item row="5" column="0">
+        <widget class="Line" name="menuSeparator1">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
        <item row="4" column="0">
         <widget class="QWidget" name="animationWidget" native="true">
          <layout class="QGridLayout" name="gridLayout_5">
@@ -356,6 +284,85 @@
             </property>
             <property name="text">
              <string>Ограничение FPS</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="Line" name="menuSeparator2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0">
+        <widget class="QPushButton" name="menuRenderButton">
+         <property name="text">
+          <string>Рендер</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0">
+        <widget class="QWidget" name="renderWidget" native="true">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="1" column="0">
+           <widget class="QLabel" name="renderResolutionLabel">
+            <property name="text">
+             <string>Разрешение</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="renderLabel">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Рендер</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="renderCoordSystemCheck">
+            <property name="text">
+             <string>Система координат</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="renderRTCheck">
+            <property name="text">
+             <string>Реальное время</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="renderResolutionSpinBox">
+            <property name="minimum">
+             <number>64</number>
+            </property>
+            <property name="maximum">
+             <number>1024</number>
+            </property>
+            <property name="singleStep">
+             <number>64</number>
+            </property>
+            <property name="value">
+             <number>512</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QCheckBox" name="renderExperimentCheck">
+            <property name="text">
+             <string>Эксперимент</string>
             </property>
            </widget>
           </item>

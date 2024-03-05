@@ -1,13 +1,11 @@
-#include "render.h"
 #include "ui.h"
 #include "util.h"
 
-void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& doubleSpinBox, object& obj, QLabel& resultLabel, QLabel& timeLabel, const QSpinBox& resolutionSpinBox, const QCheckBox& RTCheck, const QCheckBox& coordSystemCheck) {
+void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& doubleSpinBox, const std::function<long long(object&)>& render, object& obj, QLabel& timeLabel) {
     QObject::connect(&doubleSpinBox, &QDoubleSpinBox::valueChanged, [&](const double value) {
         targetObjValue = value;
 
-        if (RTCheck.isChecked())
-            updateTimeLabel(timeLabel, doWithElapsedTime(render, obj, resultLabel, coordSystemCheck.isChecked(), resolutionSpinBox.value()));
+        updateTimeLabel(timeLabel, doWithElapsedTime(render, obj));
     });
 }
 

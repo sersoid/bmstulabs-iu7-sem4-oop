@@ -55,7 +55,7 @@ point projectPoint(const point& targetPoint, const point& cameraPoint, const dou
     return projectedPoint;
 }
 
-QImage initCoordSystem(QImage& image, const point& camera, const double dirX, const double dirY, const double dirZ) {
+QImage initCoordSystemWithCamera(QImage& image, const point& camera, const double dirX, const double dirY, const double dirZ) {
     drawLine(image, projectPoint({-3, 0, 0}, camera, dirX, dirY, dirZ, image.height()), projectPoint({3, 0, 0}, camera, dirX, dirY, dirZ, image.height()), Qt::red);
     drawLine(image, projectPoint({0, -3, 0}, camera, dirX, dirY, dirZ, image.height()), projectPoint({0, 3, 0}, camera, dirX, dirY, dirZ, image.height()), Qt::green);
     drawLine(image, projectPoint({0, 0, -3}, camera, dirX, dirY, dirZ, image.height()), projectPoint({0, 0, 3}, camera, dirX, dirY, dirZ, image.height()), Qt::blue);
@@ -63,7 +63,7 @@ QImage initCoordSystem(QImage& image, const point& camera, const double dirX, co
     return image;
 }
 
-void render(object& obj, QLabel& resultLabel, const bool coordSystem, const int resolution) {
+void renderWithCamera(object& obj, QLabel& resultLabel, const bool coordSystem, const int resolution) {
     constexpr point cameraFocus = {CAMERA_TARGET_X, CAMERA_TARGET_Y, CAMERA_TARGET_Z}, camera = {CAMERA_X, CAMERA_Y, CAMERA_Z};
 
     double dirX = cameraFocus.x - camera.x;
@@ -83,7 +83,7 @@ void render(object& obj, QLabel& resultLabel, const bool coordSystem, const int 
     dirZ /= dirLength;
 
     if (coordSystem)
-        initCoordSystem(image, camera, dirX, dirY, dirZ);
+        initCoordSystemWithCamera(image, camera, dirX, dirY, dirZ);
 
     for (auto [point1, point2] : obj.edges) {
         point1 = rotatePoint(point1, obj.rotation);
@@ -94,6 +94,46 @@ void render(object& obj, QLabel& resultLabel, const bool coordSystem, const int 
 
         const point projectedPoint1 = projectPoint(point1, camera, dirX, dirY, dirZ, resolution);
         const point projectedPoint2 = projectPoint(point2, camera, dirX, dirY, dirZ, resolution);
+
+        drawLine(image, projectedPoint1, projectedPoint2, Qt::white);
+    }
+
+    resultLabel.setPixmap(QPixmap::fromImage(image).scaled(resultLabel.width(), resultLabel.height(), Qt::KeepAspectRatio));
+}
+
+point projectPointWithoutCamera(const point& targetPoint, const int resolution) {
+    point projectedPoint;
+
+    projectedPoint.x = targetPoint.x * resolution / 4 + static_cast<double>(resolution) / 2;
+    projectedPoint.y = targetPoint.y * resolution / 4 + static_cast<double>(resolution) / 2;
+
+    return projectedPoint;
+}
+
+QImage initCoordSystemWithoutCamera(QImage& image) {
+    drawLine(image, projectPointWithoutCamera({-3, 0, 0}, image.height()), projectPointWithoutCamera({3, 0, 0}, image.height()), Qt::red);
+    drawLine(image, projectPointWithoutCamera({0, -3, 0}, image.height()), projectPointWithoutCamera({0, 3, 0}, image.height()), Qt::green);
+    drawLine(image, projectPointWithoutCamera({0, 0, -3}, image.height()), projectPointWithoutCamera({0, 0, 3}, image.height()), Qt::blue);
+
+    return image;
+}
+
+void renderWithoutCamera(object& obj, QLabel& resultLabel, const bool coordSystem, const int resolution) {
+    QImage image(resolution, resolution, QImage::Format_RGB32);
+    image.fill(Qt::black);
+
+    if (coordSystem)
+        initCoordSystemWithoutCamera(image);
+
+    for (auto [point1, point2] : obj.edges) {
+        point1 = rotatePoint(point1, obj.rotation);
+        point2 = rotatePoint(point2, obj.rotation);
+
+        point1 = movePoint(point1, obj.center);
+        point2 = movePoint(point2, obj.center);
+
+        const point projectedPoint1 = projectPointWithoutCamera(point1, resolution);
+        const point projectedPoint2 = projectPointWithoutCamera(point2, resolution);
 
         drawLine(image, projectedPoint1, projectedPoint2, Qt::white);
     }

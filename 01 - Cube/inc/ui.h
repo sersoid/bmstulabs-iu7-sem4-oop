@@ -1,13 +1,12 @@
 #ifndef UI_H
 #define UI_H
 
-#include <QCheckBox>
 #include <QDoubleSpinBox>
 #include <QLabel>
 
 #include "object.h"
 
-void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& doubleSpinBox, object& obj, QLabel& resultLabel, QLabel& timeLabel, const QSpinBox& resolutionSpinBox, const QCheckBox& RTCheck, const QCheckBox& coordSystemCheck);
+void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& doubleSpinBox, const std::function<long long(object&)>& render, object& obj, QLabel& timeLabel);
 long long updateTimeLabel(QLabel& timeLabel, long long elapsedTime);
 
 #endif
