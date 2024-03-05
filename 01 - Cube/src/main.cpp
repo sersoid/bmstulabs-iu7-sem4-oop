@@ -45,18 +45,17 @@ int main(int argc, char* argv[]) {
 
     // Object
 
-    syncObjectAndDoubleSpinBox(obj.center.x, *mainUI.objectX, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.center.y, *mainUI.objectY, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.center.z, *mainUI.objectZ, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.center.x, *mainUI.objectX, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.center.y, *mainUI.objectY, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.center.z, *mainUI.objectZ, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
 
-    syncObjectAndDoubleSpinBox(obj.rotation.x, *mainUI.objectRotateX, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.rotation.y, *mainUI.objectRotateY, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.rotation.z, *mainUI.objectRotateZ, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.rotation.x, *mainUI.objectRotateX, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.rotation.y, *mainUI.objectRotateY, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.rotation.z, *mainUI.objectRotateZ, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
 
     // Animation
 
     QThread animationThread;
-
     QObject::connect(&animationThread, &QThread::started, [&] {
         object objCopy = obj;
 
@@ -75,39 +74,7 @@ int main(int argc, char* argv[]) {
         }
     });
 
-    QObject::connect(mainUI.animationCheck, &QCheckBox::stateChanged, [&](const int state) {
-        if (state == Qt::Checked) {
-            mainUI.objectX->setDisabled(true);
-            mainUI.objectY->setDisabled(true);
-            mainUI.objectZ->setDisabled(true);
-
-            mainUI.objectRotateX->setDisabled(true);
-            mainUI.objectRotateY->setDisabled(true);
-            mainUI.objectRotateZ->setDisabled(true);
-
-            mainUI.renderRTCheck->setDisabled(true);
-            mainUI.menuRenderButton->setDisabled(true);
-
-            animationThread.start();
-        } else {
-            mainUI.objectX->setEnabled(true);
-            mainUI.objectY->setEnabled(true);
-            mainUI.objectZ->setEnabled(true);
-
-            mainUI.objectRotateX->setEnabled(true);
-            mainUI.objectRotateY->setEnabled(true);
-            mainUI.objectRotateZ->setEnabled(true);
-
-            mainUI.renderRTCheck->setEnabled(true);
-
-            if (! mainUI.renderRTCheck->isChecked())
-                mainUI.menuRenderButton->setEnabled(true);
-
-            animationThread.requestInterruption();
-            animationThread.exit();
-            render(obj);
-        }
-    });
+    QObject::connect(mainUI.animationCheck, &QCheckBox::stateChanged, [&](const int state) { onAnimationCheckChanged(state, mainUI, animationThread, render, obj); });
 
     // Render
 
