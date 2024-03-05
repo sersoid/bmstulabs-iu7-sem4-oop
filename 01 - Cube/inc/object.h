@@ -9,7 +9,7 @@ union point {
         double y;
         double z;
     };
-    double coords[3] = {0, 0, 0};
+    double values[3] = {0, 0, 0};
 };
 
 struct edge {
@@ -19,23 +19,22 @@ struct edge {
 
 struct object {
     std::list<edge> edges;
-    double dx = 0;
-    double dy = 0;
-    double dz = 0;
-    double rx = 0;
-    double ry = 0;
-    double rz = 0;
+    point center;
+    point rotation;
 };
 
-// Point offset
+// Point move
 
-point movePoint(const point& point, double dx, double dy, double dz);
+point movePointX(const point& targetPoint, double dX);
+point movePointY(const point& targetPoint, double dY);
+point movePointZ(const point& targetPoint, double dZ);
+point movePoint(const point& targetPoint, const point& objCenter);
 
 // Point rotate
 
-point rotatePointX(const point& point, double angleX);
-point rotatePointY(const point& point, double angleY);
-point rotatePointZ(const point& point, double angleZ);
-point rotatePoint(const point& point, double angleX, double angleY, double angleZ);
+point rotatePointX(const point& targetPoint, double angleX);
+point rotatePointY(const point& targetPoint, double angleY);
+point rotatePointZ(const point& targetPoint, double angleZ);
+point rotatePoint(const point& targetPoint, const point& rotation);
 
 #endif

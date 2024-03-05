@@ -159,6 +159,7 @@
            <widget class="QLabel" name="objectRotateLabel">
             <property name="font">
              <font>
+              <pointsize>10</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -181,6 +182,7 @@
            <widget class="QLabel" name="objectCoordsLabel">
             <property name="font">
              <font>
+              <pointsize>10</pointsize>
               <bold>true</bold>
              </font>
             </property>
@@ -239,21 +241,14 @@
            <widget class="QLabel" name="objectLabel">
             <property name="font">
              <font>
-              <pointsize>10</pointsize>
               <bold>true</bold>
              </font>
             </property>
             <property name="text">
              <string>Объект</string>
             </property>
-            <property name="textFormat">
-             <enum>Qt::AutoText</enum>
-            </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
-            </property>
-            <property name="wordWrap">
-             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -316,10 +311,16 @@
        <item row="4" column="0">
         <widget class="QWidget" name="animationWidget" native="true">
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="animationCheck">
-            <property name="text">
-             <string>Анимация</string>
+          <item row="2" column="0">
+           <widget class="QSpinBox" name="animationFPSSpinBox">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>120</number>
+            </property>
+            <property name="value">
+             <number>30</number>
             </property>
            </widget>
           </item>
@@ -335,6 +336,26 @@
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="animationCheck">
+            <property name="text">
+             <string>Анимация</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
+            <property name="font">
+             <font>
+              <pointsize>10</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ограничение FPS</string>
             </property>
            </widget>
           </item>

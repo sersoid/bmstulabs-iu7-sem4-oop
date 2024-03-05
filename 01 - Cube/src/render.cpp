@@ -41,15 +41,15 @@ void drawLine(QImage& image, const point& point1, const point& point2, const QCo
 point projectPoint(const point& targetPoint, const point& cameraPoint, const double dirX, const double dirY, const double dirZ, const int resolution) {
     point projectedPoint;
 
-    const double dx = targetPoint.x - cameraPoint.x;
-    const double dy = targetPoint.y - cameraPoint.y;
-    const double dz = targetPoint.z - cameraPoint.z;
+    const double dX = targetPoint.x - cameraPoint.x;
+    const double dY = targetPoint.y - cameraPoint.y;
+    const double dZ = targetPoint.z - cameraPoint.z;
 
-    const double pointProduct = dx * dirX + dy * dirY + dz * dirZ;
+    const double pointProduct = dX * dirX + dY * dirY + dZ * dirZ;
 
     if (pointProduct > 0) {
-        projectedPoint.x = dx / pointProduct * resolution / 2 + resolution / 2;
-        projectedPoint.y = dy / pointProduct * resolution / 2 + resolution / 2;
+        projectedPoint.x = dX / pointProduct * resolution / 2 + static_cast<double>(resolution) / 2;
+        projectedPoint.y = dY / pointProduct * resolution / 2 + static_cast<double>(resolution) / 2;
     }
     else
         projectedPoint = {INFINITY, INFINITY};
@@ -88,11 +88,11 @@ void render(object& obj, QLabel& resultLabel, const bool coordSystem, const int 
         initCoordSystem(image, camera, dirX, dirY, dirZ);
 
     for (auto [point1, point2] : obj.edges) {
-        point1 = rotatePoint(point1, obj.rx, obj.ry, obj.rz);
-        point2 = rotatePoint(point2, obj.rx, obj.ry, obj.rz);
+        point1 = rotatePoint(point1, obj.rotation);
+        point2 = rotatePoint(point2, obj.rotation);
 
-        point1 = movePoint(point1, obj.dx, obj.dy, obj.dz);
-        point2 = movePoint(point2, obj.dx, obj.dy, obj.dz);
+        point1 = movePoint(point1, obj.center);
+        point2 = movePoint(point2, obj.center);
 
         const point projectedPoint1 = projectPoint(point1, camera, dirX, dirY, dirZ, resolution);
         const point projectedPoint2 = projectPoint(point2, camera, dirX, dirY, dirZ, resolution);

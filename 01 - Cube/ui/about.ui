@@ -57,7 +57,7 @@
        </sizepolicy>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;Лабораторная работа №1 по ООП&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Автор: Степнов С.В. ИУ7-46Б&lt;br/&gt;&lt;/span&gt;&lt;a href=&quot;https://github.com/sersoid/bmstulabs-iu7-sem4-oop&quot;&gt;&lt;span style=&quot; font-size:12pt; text-decoration: underline; color:#000000;&quot;&gt;Репозиторий&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt; font-weight:700;&quot;&gt;Лабораторная работа №1 по ООП&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Автор: Степнов С.В. ИУ7-46Б&lt;br/&gt;Github: https://github.com/sersoid/bmstulabs-iu7-sem4-oop&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="textFormat">
        <enum>Qt::MarkdownText</enum>

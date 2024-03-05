@@ -43,31 +43,28 @@ int main(int argc, char* argv[]) {
 
     // Object
 
-    syncObjectAndDoubleSpinBox(obj.dx, *mainUI.objectX, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
-    syncObjectAndDoubleSpinBox(obj.dy, *mainUI.objectY, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
-    syncObjectAndDoubleSpinBox(obj.dz, *mainUI.objectZ, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
+    syncObjectAndDoubleSpinBox(obj.center.x, *mainUI.objectX, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
+    syncObjectAndDoubleSpinBox(obj.center.y, *mainUI.objectY, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
+    syncObjectAndDoubleSpinBox(obj.center.z, *mainUI.objectZ, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
 
-    syncObjectAndDoubleSpinBox(obj.rx, *mainUI.objectRotateX, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
-    syncObjectAndDoubleSpinBox(obj.ry, *mainUI.objectRotateY, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
-    syncObjectAndDoubleSpinBox(obj.rz, *mainUI.objectRotateZ, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
+    syncObjectAndDoubleSpinBox(obj.rotation.x, *mainUI.objectRotateX, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
+    syncObjectAndDoubleSpinBox(obj.rotation.y, *mainUI.objectRotateY, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
+    syncObjectAndDoubleSpinBox(obj.rotation.z, *mainUI.objectRotateZ, obj, *mainUI.resultLabel, *mainUI.resultTimeLabel, *mainUI.renderResolutionSpinBox, *mainUI.renderRTCheck, *mainUI.renderCoordSystemCheck);
 
     // Animation
 
-    // TODO: Заставить анимацию проигрываться после повторного включения флага mainUI.animationCheck
     QThread animationThread;
 
     QObject::connect(&animationThread, &QThread::started, [&] {
-        constexpr int frameTimeMs = 1000 / 30;
         object objCopy = obj;
 
-        objCopy.rx = 0;
-        objCopy.ry = 0;
-        objCopy.rz = 0;
-
         while (! animationThread.isInterruptionRequested()) {
-            objCopy.rx = std::fmod(objCopy.rx + 2, 360);
-            objCopy.ry = std::fmod(objCopy.ry + 3, 360);
-            objCopy.rz = std::fmod(objCopy.rz + 4, 360);
+            const int frameTimeMs = 1000 / mainUI.animationFPSSpinBox->value();
+            const double stepMlt = 30.0 / mainUI.animationFPSSpinBox->value();
+
+            objCopy.rotation.x = std::fmod(objCopy.rotation.x + 2 * stepMlt, 360);
+            objCopy.rotation.y = std::fmod(objCopy.rotation.y + 3 * stepMlt, 360);
+            objCopy.rotation.z = std::fmod(objCopy.rotation.z + 4 * stepMlt, 360);
 
             const long long elapsedTime = renderCall(objCopy);
 
@@ -105,6 +102,7 @@ int main(int argc, char* argv[]) {
                 mainUI.menuRenderButton->setEnabled(true);
 
             animationThread.requestInterruption();
+            animationThread.exit();
             renderCall(obj);
         }
     });
