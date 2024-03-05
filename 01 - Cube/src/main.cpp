@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     // TODO: Заставить анимацию проигрываться после повторного включения флага mainUI.animationCheck
     QThread animationThread;
 
-    QObject::connect(&animationThread, QThread::started, [&] {
+    QObject::connect(&animationThread, &QThread::started, [&] {
         constexpr int frameTimeMs = 1000 / 30;
         object objCopy = obj;
 
@@ -111,10 +111,10 @@ int main(int argc, char* argv[]) {
 
     // Render
 
-    QObject::connect(mainUI.renderResolutionSpinBox, QSpinBox::valueChanged, [&] { if (mainUI.renderRTCheck->isChecked()) renderCall(obj); });
+    QObject::connect(mainUI.renderResolutionSpinBox, &QSpinBox::valueChanged, [&] { if (mainUI.renderRTCheck->isChecked()) renderCall(obj); });
 
-    QObject::connect(mainUI.renderRTCheck, QCheckBox::stateChanged, [&](const int state) { if (state) renderCall(obj); });
-    QObject::connect(mainUI.renderCoordSystemCheck, QCheckBox::stateChanged, [&] { if (mainUI.renderRTCheck->isChecked()) renderCall(obj); });
+    QObject::connect(mainUI.renderRTCheck, &QCheckBox::stateChanged, [&](const int state) { if (state) renderCall(obj); });
+    QObject::connect(mainUI.renderCoordSystemCheck, &QCheckBox::stateChanged, [&] { if (mainUI.renderRTCheck->isChecked()) renderCall(obj); });
 
     QObject::connect(mainUI.menuRenderButton, &QPushButton::clicked, [&] { renderCall(obj); });
 
