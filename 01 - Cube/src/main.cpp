@@ -2,7 +2,7 @@
 
 #include "object.h"
 #include "render.h"
-#include "utils.h"
+#include "util.h"
 #include "ui.h"
 
 #include "../ui/ui_about.h"

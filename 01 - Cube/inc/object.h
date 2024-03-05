@@ -1,5 +1,5 @@
-#ifndef __H_OBJECT
-#define __H_OBJECT
+#ifndef OBJECT_H
+#define OBJECT_H
 
 #include <list>
 

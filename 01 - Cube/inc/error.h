@@ -1,5 +1,5 @@
-#ifndef __H_ERROR
-#define __H_ERROR
+#ifndef ERROR_H
+#define ERROR_H
 
 #define OK 0
 #define FILE_DOESNT_EXIST 0b1

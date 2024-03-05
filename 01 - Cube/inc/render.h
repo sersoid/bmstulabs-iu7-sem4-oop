@@ -1,10 +1,10 @@
-#ifndef __H_RENDER
-#define __H_RENDER
+#ifndef RENDER_H
+#define RENDER_H
 
 #include <QImage>
+#include <QLabel>
 
 #include "object.h"
-#include "ui.h"
 
 #define CAMERA_X 3
 #define CAMERA_Y 3

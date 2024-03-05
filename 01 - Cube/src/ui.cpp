@@ -1,6 +1,6 @@
 #include "render.h"
 #include "ui.h"
-#include "utils.h"
+#include "util.h"
 
 void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& doubleSpinBox, object& obj, QLabel& resultLabel, QLabel& timeLabel, const QSpinBox& resolutionSpinBox, const QCheckBox& RTCheck, const QCheckBox& coordSystemCheck) {
     QObject::connect(&doubleSpinBox, &QDoubleSpinBox::valueChanged, [&](const double value) {

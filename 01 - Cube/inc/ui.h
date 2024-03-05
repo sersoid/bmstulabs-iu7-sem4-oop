@@ -1,5 +1,5 @@
-#ifndef __H_UI
-#define __H_UI
+#ifndef UI_H
+#define UI_H
 
 #include <QCheckBox>
 #include <QDoubleSpinBox>
