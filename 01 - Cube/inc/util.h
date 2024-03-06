@@ -4,12 +4,21 @@
 #include <chrono>
 #include <utility>
 
-long long calculateElapsedTimeInMilliseconds(std::chrono::steady_clock::time_point start_time, std::chrono::steady_clock::time_point end_time);
+long long calculateElapsedTimeInMilliseconds(std::chrono::steady_clock::time_point start, std::chrono::steady_clock::time_point end);
 
 template<typename function, typename... functionArgs>
 long long doWithElapsedTime(function&& func, functionArgs&&... args) {
     const std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
     std::forward<function>(func)(std::forward<functionArgs>(args)...);
+    const std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+
+    return calculateElapsedTimeInMilliseconds(start, end);
+}
+
+template<typename function, typename functionOut, typename... functionArgs>
+std::enable_if_t<! std::is_reference_v<function>, long long> doWithElapsedTime(function&& func, functionOut& out, functionArgs&&... args) {
+    const std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    out = std::forward<function>(func)(std::forward<functionArgs>(args)...);
     const std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 
     return calculateElapsedTimeInMilliseconds(start, end);

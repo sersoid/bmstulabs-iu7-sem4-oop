@@ -39,19 +39,33 @@ int main(int argc, char* argv[]) {
     mainUI.setupUi(&mainWidget);
     aboutUI.setupUi(&aboutWidget);
 
-    const std::function renderWithCameraCall = [&](object& renderObj) { return updateTimeLabel(*mainUI.resultTimeLabel, doWithElapsedTime(renderWithCamera, renderObj, *mainUI.resultLabel, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value())); };
-    const std::function renderWithoutCameraCall = [&](object& renderObj) { return updateTimeLabel(*mainUI.resultTimeLabel, doWithElapsedTime(renderWithoutCamera, renderObj, *mainUI.resultLabel, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value())); };
+    const std::function renderWithCameraCall = [&](object& renderObj) {
+        std::vector image(mainUI.renderResolutionSpinBox->value(), std::vector<color>(mainUI.renderResolutionSpinBox->value()));
+        const long long elapsedTime = updateTimeLabel(*mainUI.resultTimeLabel, doWithElapsedTime(renderWithCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value()));
+
+        updateQLabelByImage(*mainUI.resultLabel, image);
+
+        return elapsedTime;
+    };
+    const std::function renderWithoutCameraCall = [&](object& renderObj) {
+        std::vector image(mainUI.renderResolutionSpinBox->value(), std::vector<color>(mainUI.renderResolutionSpinBox->value()));
+        const long long elapsedTime = updateTimeLabel(*mainUI.resultTimeLabel, doWithElapsedTime(renderWithoutCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value()));
+
+        updateQLabelByImage(*mainUI.resultLabel, image);
+
+        return elapsedTime;
+    };
     std::function render = renderWithoutCameraCall;
 
     // Object
 
-    syncObjectAndDoubleSpinBox(obj.center.x, *mainUI.objectX, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.center.y, *mainUI.objectY, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.center.z, *mainUI.objectZ, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.center.x, *mainUI.objectX, *mainUI.renderRTCheck, render, obj);
+    syncObjectAndDoubleSpinBox(obj.center.y, *mainUI.objectY, *mainUI.renderRTCheck, render, obj);
+    syncObjectAndDoubleSpinBox(obj.center.z, *mainUI.objectZ, *mainUI.renderRTCheck, render, obj);
 
-    syncObjectAndDoubleSpinBox(obj.rotation.x, *mainUI.objectRotateX, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.rotation.y, *mainUI.objectRotateY, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
-    syncObjectAndDoubleSpinBox(obj.rotation.z, *mainUI.objectRotateZ, *mainUI.renderRTCheck, render, obj, *mainUI.resultTimeLabel);
+    syncObjectAndDoubleSpinBox(obj.rotation.x, *mainUI.objectRotateX, *mainUI.renderRTCheck, render, obj);
+    syncObjectAndDoubleSpinBox(obj.rotation.y, *mainUI.objectRotateY, *mainUI.renderRTCheck, render, obj);
+    syncObjectAndDoubleSpinBox(obj.rotation.z, *mainUI.objectRotateZ, *mainUI.renderRTCheck, render, obj);
 
     // Animation
 

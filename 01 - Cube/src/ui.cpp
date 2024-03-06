@@ -1,12 +1,11 @@
 #include "ui.h"
-#include "util.h"
 
-void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& doubleSpinBox, const QCheckBox& RTCheck, const std::function<long long(object&)>& render, object& obj, QLabel& timeLabel) {
+void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& doubleSpinBox, const QCheckBox& RTCheck, const std::function<long long(object&)>& render, object& obj) {
     QObject::connect(&doubleSpinBox, &QDoubleSpinBox::valueChanged, [&](const double value) {
         targetObjValue = value;
 
         if (RTCheck.isChecked())
-            updateTimeLabel(timeLabel, doWithElapsedTime(render, obj));
+            render(obj);
     });
 }
 
@@ -35,6 +34,16 @@ void onAnimationCheckChanged(const int state, const Ui::mainWindow& mainUI, QThr
         animationThread.exit();
         render(obj);
     }
+}
+
+void updateQLabelByImage(QLabel& resultLabel, const std::vector<std::vector<color>>& image) {
+    QImage resultImage(static_cast<int>(image.size()), static_cast<int>(image.size()), QImage::Format_RGB32);
+
+    for (int i = 0; i < image.size(); i++)
+        for (int j = 0; j < image.size(); j++)
+            resultImage.setPixel(i, j, QColor(image[i][j].r, image[i][j].g, image[i][j].b).rgb());
+
+    resultLabel.setPixmap(QPixmap::fromImage(resultImage).scaled(resultLabel.width(), resultLabel.height(), Qt::KeepAspectRatio));
 }
 
 long long updateTimeLabel(QLabel& timeLabel, const long long elapsedTime) {
