@@ -41,19 +41,17 @@ int main(int argc, char* argv[]) {
 
     const std::function renderWithCameraCall = [&](object& renderObj) {
         std::vector image(mainUI.renderResolutionSpinBox->value(), std::vector<color>(mainUI.renderResolutionSpinBox->value()));
-        const long long elapsedTime = updateTimeLabel(*mainUI.resultTimeLabel, doWithElapsedTime(renderWithCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value()));
+        const long long elapsedTimeCalculation = doWithElapsedTime(renderWithCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value());
+        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, *mainUI.resultLabel, image);
 
-        updateQLabelByImage(*mainUI.resultLabel, image);
-
-        return elapsedTime;
+        return updateTimeLabel(*mainUI.resultTimeLabel, elapsedTimeCalculation, elapsedTimeRender);;
     };
     const std::function renderWithoutCameraCall = [&](object& renderObj) {
         std::vector image(mainUI.renderResolutionSpinBox->value(), std::vector<color>(mainUI.renderResolutionSpinBox->value()));
-        const long long elapsedTime = updateTimeLabel(*mainUI.resultTimeLabel, doWithElapsedTime(renderWithoutCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value()));
+        const long long elapsedTimeCalculation = doWithElapsedTime(renderWithoutCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value());
+        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, *mainUI.resultLabel, image);
 
-        updateQLabelByImage(*mainUI.resultLabel, image);
-
-        return elapsedTime;
+        return updateTimeLabel(*mainUI.resultTimeLabel, elapsedTimeCalculation, elapsedTimeRender);;
     };
     std::function render = renderWithoutCameraCall;
 

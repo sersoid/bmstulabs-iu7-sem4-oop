@@ -15,6 +15,6 @@ void onAnimationCheckChanged(int state, const Ui::mainWindow& mainUI, QThread& a
 
 void updateQLabelByImage(QLabel& resultLabel, const std::vector<std::vector<color>>& image);
 
-long long updateTimeLabel(QLabel& timeLabel, long long elapsedTime);
+long long updateTimeLabel(QLabel& timeLabel, long long elapsedTimeCalculation, long long elapsedTimeRender);
 
 #endif

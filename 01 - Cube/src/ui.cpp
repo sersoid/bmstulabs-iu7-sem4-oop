@@ -37,17 +37,21 @@ void onAnimationCheckChanged(const int state, const Ui::mainWindow& mainUI, QThr
 }
 
 void updateQLabelByImage(QLabel& resultLabel, const std::vector<std::vector<color>>& image) {
-    QImage resultImage(static_cast<int>(image.size()), static_cast<int>(image.size()), QImage::Format_RGB32);
+    const int resolution = static_cast<int>(image.size()), buffer_step = resolution * 3, buffer_size = buffer_step * resolution;
+    unsigned char* buffer = new unsigned char[buffer_size];
 
-    for (int i = 0; i < image.size(); i++)
-        for (int j = 0; j < image.size(); j++)
-            resultImage.setPixel(i, j, QColor(image[i][j].r, image[i][j].g, image[i][j].b).rgb());
+    for (size_t i = 0; i < resolution; i++)
+        memcpy(buffer + i * buffer_step, image[i].data(), resolution * 3);
+
+    const QImage resultImage(buffer, resolution, resolution, QImage::Format_RGB888);
 
     resultLabel.setPixmap(QPixmap::fromImage(resultImage).scaled(resultLabel.width(), resultLabel.height(), Qt::KeepAspectRatio));
+
+    delete[] buffer;
 }
 
-long long updateTimeLabel(QLabel& timeLabel, const long long elapsedTime) {
-    timeLabel.setText(QString::number(elapsedTime) + " мс");
+long long updateTimeLabel(QLabel& timeLabel, const long long elapsedTimeCalculation, const long long elapsedTimeRender) {
+    timeLabel.setText("Вычисление: " + QString::number(elapsedTimeCalculation) + " мс | Отрисовка: " + QString::number(elapsedTimeRender) + " мс");
 
-    return elapsedTime;
+    return elapsedTimeCalculation + elapsedTimeRender;
 }
