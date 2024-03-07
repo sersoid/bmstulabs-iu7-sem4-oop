@@ -20,10 +20,6 @@ union color {
         unsigned char b;
     };
     unsigned char values[3] = {0, 0, 0};
-
-    operator unsigned int() const {
-        return static_cast<unsigned int>(r * 0x10000 + g * 0x100 + b);
-    }
 };
 
 void drawLine(std::vector<std::vector<color>>& image, const point& point1, const point& point2, color lineColor);

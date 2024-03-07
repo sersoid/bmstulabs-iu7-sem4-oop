@@ -36,16 +36,12 @@ void onAnimationCheckChanged(const int state, const Ui::mainWindow& mainUI, QThr
     }
 }
 
-template <size_t n, size_t m>
-void updateQLabelByImage(QLabel& resultLabel, const std::array<std::array<color, n>, m>& image) {
-    const int resolution = static_cast<int>(image.size());
+void updateQLabelByImage(QLabel& resultLabel, const std::vector<std::vector<color>>& image) {
+    QImage resultImage(static_cast<int>(image.size()), static_cast<int>(image.size()), QImage::Format_RGB32);
 
-    QImage resultImage(resolution, resolution, QImage::Format_RGB32);
-    QRgb* resultImageBits = reinterpret_cast<QRgb*>(resultImage.bits());
-
-    for (size_t y = 0; y < resolution; y++)
-        for (size_t x = 0; x < resolution; x++)
-            resultImageBits[y * resolution + x] = static_cast<unsigned int>(image[x][y]);
+    for (int i = 0; i < image.size(); i++)
+        for (int j = 0; j < image.size(); j++)
+            resultImage.setPixel(i, j, QColor(image[i][j].r, image[i][j].g, image[i][j].b).rgb());
 
     resultLabel.setPixmap(QPixmap::fromImage(resultImage).scaled(resultLabel.width(), resultLabel.height(), Qt::KeepAspectRatio));
 }
