@@ -13,7 +13,7 @@ void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& do
 void animationDisableWidgets(const Ui::mainWindow& mainUI, bool isDisable);
 void onAnimationCheckChanged(int state, const Ui::mainWindow& mainUI, QThread& animationThread, const std::function<long long(object&)>& render, object &obj);
 
-void updateQLabelByImage(QLabel& resultLabel, const std::vector<std::vector<color>>& image);
+void updateQLabelByImage(QLabel& resultLabel, const std::array<std::array<color, n>, m>& image);
 
 long long updateTimeLabel(QLabel& timeLabel, long long elapsedTime);
 
