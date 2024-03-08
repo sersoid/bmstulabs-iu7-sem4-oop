@@ -1,5 +1,3 @@
-#include <QThread>
-
 #include "object.h"
 #include "render.h"
 #include "util.h"
@@ -95,21 +93,11 @@ int main(int argc, char* argv[]) {
     mainUI.setupUi(&mainWidget);
     aboutUI.setupUi(&aboutWidget);
 
-    const std::function renderWithCameraCall = [&](object& renderObj) {
-        std::vector image(mainUI.renderResolutionSpinBox->value(), std::vector<color>(mainUI.renderResolutionSpinBox->value()));
-        const long long elapsedTimeCalculation = doWithElapsedTime(renderWithCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value());
-        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, *mainUI.resultLabel, image);
+    // Properties
 
-        return updateTimeLabel(*mainUI.resultTimeLabel, elapsedTimeCalculation, elapsedTimeRender);;
-    };
-    const std::function renderWithoutCameraCall = [&](object& renderObj) {
-        std::vector image(mainUI.renderResolutionSpinBox->value(), std::vector<color>(mainUI.renderResolutionSpinBox->value()));
-        const long long elapsedTimeCalculation = doWithElapsedTime(renderWithoutCamera, image, renderObj, mainUI.renderCoordSystemCheck->isChecked(), mainUI.renderResolutionSpinBox->value());
-        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, *mainUI.resultLabel, image);
-
-        return updateTimeLabel(*mainUI.resultTimeLabel, elapsedTimeCalculation, elapsedTimeRender);;
-    };
-    std::function render = renderWithoutCameraCall;
+    const std::function<long long(object&)> renderWithCameraCall = renderWithTimeUpdate(*mainUI.resultLabel, *mainUI.resultTimeLabel, renderWithCamera, *mainUI.renderResolutionSpinBox, *mainUI.renderCoordSystemCheck);
+    const std::function<long long(object&)> renderWithoutCameraCall = renderWithTimeUpdate(*mainUI.resultLabel, *mainUI.resultTimeLabel, renderWithoutCamera, *mainUI.renderResolutionSpinBox, *mainUI.renderCoordSystemCheck);
+    std::function<long long(object&)> render = renderWithoutCameraCall;
 
     // Object
 
@@ -124,24 +112,8 @@ int main(int argc, char* argv[]) {
     // Animation
 
     QThread animationThread;
-    QObject::connect(&animationThread, &QThread::started, [&] {
-        object objCopy = obj;
 
-        while (! animationThread.isInterruptionRequested()) {
-            const int frameTimeMs = 1000 / mainUI.animationFPSSpinBox->value();
-            const double stepMlt = 30.0 / mainUI.animationFPSSpinBox->value();
-
-            objCopy.rotation.x = std::fmod(objCopy.rotation.x + 2 * stepMlt, 360);
-            objCopy.rotation.y = std::fmod(objCopy.rotation.y + 3 * stepMlt, 360);
-            objCopy.rotation.z = std::fmod(objCopy.rotation.z + 4 * stepMlt, 360);
-
-            const long long elapsedTime = render(objCopy);
-
-            if (elapsedTime < frameTimeMs)
-                QThread::msleep(std::chrono::milliseconds(frameTimeMs - elapsedTime).count());
-        }
-    });
-
+    QObject::connect(&animationThread, &QThread::started, [&] { initAnimationThread(animationThread, render, obj, mainUI.animationFPSSpinBox->value()); });
     QObject::connect(mainUI.animationCheck, &QCheckBox::stateChanged, [&](const int state) { onAnimationCheckChanged(state, mainUI, animationThread, render, obj); });
 
     // Render
@@ -159,7 +131,6 @@ int main(int argc, char* argv[]) {
 
     // Actions
 
-    // QObject::connect(mainUI.actionOpen, &QAction::triggered, ...);
     QObject::connect(mainUI.actionAbout, &QAction::triggered, [&aboutWidget]{ aboutWidget.show(); });
 
     // Initial
