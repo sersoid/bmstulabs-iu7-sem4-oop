@@ -14,7 +14,7 @@ void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& do
 
 // Animation
 
-void initAnimationThread(const QThread& animationThread, const std::function<long long(object&)>& render, const object& obj, const int& FPSLimit);
+void initAnimationThread(const QThread& animationThread, const std::function<long long(object&)>& render, const object& obj, const QSpinBox& FPSSpinBox);
 void onAnimationCheckChanged(int state, const Ui::mainWindow& mainUI, QThread& animationThread, const std::function<long long(object&)>& render, object &obj);
 void animationDisableWidgets(const Ui::mainWindow& mainUI, bool isDisable);
 

@@ -14,10 +14,11 @@ void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& do
 
 // Animation
 
-void initAnimationThread(const QThread& animationThread, const std::function<long long(object&)>& render, const object& obj, const int& FPSLimit) {
+void initAnimationThread(const QThread& animationThread, const std::function<long long(object&)>& render, const object& obj, const QSpinBox& FPSSpinBox) {
     object objCopy = obj;
 
     while (! animationThread.isInterruptionRequested()) {
+        const int FPSLimit = FPSSpinBox.value();
         const int frameTimeMs = 1000 / FPSLimit;
         const double stepMlt = 30.0 / FPSLimit;
 

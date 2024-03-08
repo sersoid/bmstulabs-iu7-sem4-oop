@@ -113,7 +113,7 @@ int main(int argc, char* argv[]) {
 
     QThread animationThread;
 
-    QObject::connect(&animationThread, &QThread::started, [&] { initAnimationThread(animationThread, render, obj, mainUI.animationFPSSpinBox->value()); });
+    QObject::connect(&animationThread, &QThread::started, [&] { initAnimationThread(animationThread, render, obj, *mainUI.animationFPSSpinBox); });
     QObject::connect(mainUI.animationCheck, &QCheckBox::stateChanged, [&](const int state) { onAnimationCheckChanged(state, mainUI, animationThread, render, obj); });
 
     // Render
