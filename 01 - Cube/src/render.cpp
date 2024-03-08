@@ -6,8 +6,8 @@ void drawLine(std::vector<std::vector<color>>& image, const point& point1, const
     if (std::isinf(fabs(point1.x)) || std::isinf(fabs(point1.y)) || std::isinf(fabs(point2.x)) || std::isinf(fabs(point2.y)))
         return;
 
-    int x1 = static_cast<int>(point1.x), y1 = static_cast<int>(point1.y);
-    const int x2 = static_cast<int>(point2.x), y2 = static_cast<int>(point2.y);
+    int x1 = static_cast<int>(std::round(point1.x)), y1 = static_cast<int>(std::round(point1.y));
+    const int x2 = static_cast<int>(std::round(point2.x)), y2 = static_cast<int>(std::round(point2.y));
     const int resolution = static_cast<int>(image.size());
 
     if (x1 < 0 && x2 < 0 || x1 >= resolution && x2 >= resolution || y1 < 0 && y2 < 0 || y1 >= resolution && y2 >= resolution)
@@ -17,14 +17,14 @@ void drawLine(std::vector<std::vector<color>>& image, const point& point1, const
     int err = dx - dy;
     const int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1;
 
-    while (x1 != x2 || y1 != y2) {
+    do {
         if (x1 < 0 && sx == -1 || x1 >= resolution && sx == 1 || y1 < 0 && sy == -1 || y1 >= resolution && sy == 1)
             break;
 
         if (x1 >= 0 && x1 < resolution && y1 >= 0 && y1 < resolution)
             image[x1][y1] = lineColor;
 
-        int e2 = 2 * err;
+        const int e2 = 2 * err;
 
         if (e2 > -dy) {
             err -= dy;
@@ -34,7 +34,7 @@ void drawLine(std::vector<std::vector<color>>& image, const point& point1, const
             err += dx;
             y1 += sy;
         }
-    }
+    } while (x1 != x2 || y1 != y2);
 }
 
 point projectPoint(const point& targetPoint, const point& cameraPoint, const double dirX, const double dirY, const double dirZ, const int resolution) {
