@@ -2,6 +2,7 @@
 #define OBJECT_H
 
 #include <list>
+#include <string>
 
 union point {
     struct {
@@ -22,6 +23,10 @@ struct object {
     point center;
     point rotation;
 };
+
+// Object
+
+int loadObject(const std::string& filePath, object& obj);
 
 // Point move
 

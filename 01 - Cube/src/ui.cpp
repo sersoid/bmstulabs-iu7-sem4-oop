@@ -1,3 +1,5 @@
+#include <QFileDialog>
+
 #include "ui.h"
 #include "util.h"
 
@@ -14,23 +16,28 @@ void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& do
 
 // Animation
 
-void initAnimationThread(const QThread& animationThread, const std::function<long long(object&)>& render, const object& obj, const QSpinBox& FPSSpinBox) {
-    object objCopy = obj;
+void initAnimationThread(const QThread& animationThread, const std::function<long long(object&)>& render, object& obj, const QSpinBox& FPSSpinBox) {
+    point center = obj.center, rotation = obj.rotation;
 
     while (! animationThread.isInterruptionRequested()) {
         const int FPSLimit = FPSSpinBox.value();
         const int frameTimeMs = 1000 / FPSLimit;
         const double stepMlt = 30.0 / FPSLimit;
 
-        objCopy.rotation.x = std::fmod(objCopy.rotation.x + 2 * stepMlt, 360);
-        objCopy.rotation.y = std::fmod(objCopy.rotation.y + 3 * stepMlt, 360);
-        objCopy.rotation.z = std::fmod(objCopy.rotation.z + 4 * stepMlt, 360);
+        obj.rotation.x = std::fmod(obj.rotation.x + 2 * stepMlt, 360);
+        obj.rotation.y = std::fmod(obj.rotation.y + 3 * stepMlt, 360);
+        obj.rotation.z = std::fmod(obj.rotation.z + 4 * stepMlt, 360);
 
-        const long long elapsedTime = render(objCopy);
+        const long long elapsedTime = render(obj);
 
         if (elapsedTime < frameTimeMs)
             QThread::msleep(std::chrono::milliseconds(frameTimeMs - elapsedTime).count());
     }
+
+    obj.center = center;
+    obj.rotation = rotation;
+
+    render(obj);
 }
 
 void onAnimationCheckChanged(const int state, const Ui::mainWindow& mainUI, QThread& animationThread, const std::function<long long(object&)>& render, object &obj) {
@@ -41,7 +48,6 @@ void onAnimationCheckChanged(const int state, const Ui::mainWindow& mainUI, QThr
     else {
         animationThread.requestInterruption();
         animationThread.exit();
-        render(obj);
     }
 }
 
@@ -72,6 +78,15 @@ std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLab
 
         return updateTimeLabel(timeLabel, elapsedTimeCalculation, elapsedTimeRender);
     };
+}
+
+// Actions
+
+void selectFileDialog(const Ui::mainWindow& mainUI, object& obj) {
+    QString objFileName = QFileDialog::getOpenFileName(mainUI.mainWidget, "Файл объекта", "../data/");
+
+    if (! objFileName.isEmpty())
+        loadObject(objFileName.toStdString(), obj);
 }
 
 // Result

@@ -1,6 +1,43 @@
 #include <cmath>
+#include <fstream>
+#include <sstream>
 
 #include "object.h"
+
+// Object
+
+int loadObject(const std::string& filePath, object& obj) {
+    int rc = 0; // OK
+    std::ifstream file(filePath);
+
+    if (file.is_open()) {
+        object objCopy = obj;
+        std::string line;
+
+        objCopy.edges.clear();
+
+        while (std::getline(file, line))
+        {
+            std::istringstream iss(line);
+            double x1, y1, z1, x2, y2, z2;
+
+            if (! (iss >> x1 >>  y1 >> z1 >> x2 >> y2 >> z2)) {
+                rc = 2; // FILE_FORMAT_ERROR
+                break;
+            }
+
+            objCopy.edges.push_back({{x1, y1, z1}, {x2, y2, z2}});
+        }
+
+        if (rc == 0) // OK
+            obj = objCopy;
+
+        file.close();
+    } else
+        rc = 1; // FILE_OPEN_ERROR
+
+    return rc;
+}
 
 // Point move
 
