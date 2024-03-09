@@ -24,7 +24,7 @@ std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLab
 
 // Actions
 
-void selectFileDialog(const Ui::mainWindow& mainUI, object& obj);
+int selectFileDialog(const Ui::mainWindow& mainUI, object& obj);
 
 // Result
 

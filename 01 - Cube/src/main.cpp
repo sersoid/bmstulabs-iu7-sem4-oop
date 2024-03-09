@@ -60,16 +60,19 @@ int main(int argc, char* argv[]) {
     // Actions
 
     QObject::connect(mainUI.actionOpen, &QAction::triggered, [&] {
-        selectFileDialog(mainUI, obj);
+        if (selectFileDialog(mainUI, obj) == 0) {
+            mainUI.menuWidget->setDisabled(false);
 
-        if (! mainUI.animationCheck->isChecked())
-            render(obj);
+            if (! mainUI.animationCheck->isChecked())
+                render(obj);
+        }
     });
     QObject::connect(mainUI.actionAbout, &QAction::triggered, [&]{ aboutWidget.show(); });
 
     // Initial
 
     render(obj);
+    mainUI.menuWidget->setDisabled(true);
     mainWidget.show();
 
     return QApplication::exec();
