@@ -6,7 +6,8 @@
 
 1. Установить [Qt](https://www.qt.io/)
 2. Указать путь до Qt в [CMakeLists.txt](https://github.com/sersoid/bmstulabs-iu7-sem4-oop/blob/master/CMakeLists.txt#L10)
-```
+
+```cmake
 ...
 set(CMAKE_PREFIX_PATH "<path-to-qt>")
 ...

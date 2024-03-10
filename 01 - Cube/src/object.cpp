@@ -17,17 +17,15 @@ int loadObject(const std::string& filePath, object& obj) {
 
         objCopy.edges.clear();
 
-        while (std::getline(file, line))
+        while (std::getline(file, line) && rc == OK)
         {
             std::istringstream iss(line);
             double x1, y1, z1, x2, y2, z2;
 
-            if (! (iss >> x1 >>  y1 >> z1 >> x2 >> y2 >> z2)) {
+            if (iss >> x1 >>  y1 >> z1 >> x2 >> y2 >> z2)
+                objCopy.edges.push_back({{x1, y1, z1}, {x2, y2, z2}});
+            else
                 rc |= FILE_FORMAT_ERROR;
-                break;
-            }
-
-            objCopy.edges.push_back({{x1, y1, z1}, {x2, y2, z2}});
         }
 
         if (rc == OK)

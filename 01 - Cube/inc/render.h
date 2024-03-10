@@ -22,14 +22,7 @@ union color {
     unsigned char values[3] = {0, 0, 0};
 };
 
-void drawLine(std::vector<std::vector<color>>& image, const point& point1, const point& point2, color lineColor);
-
-point projectPointWithCamera(const point& targetPoint, const point& cameraPoint, double dirX, double dirY, double dirZ, int resolution);
-void initCoordSystemWithCamera(std::vector<std::vector<color>>& image, const point& camera, double dirX, double dirY, double dirZ);
-void renderWithCamera(std::vector<std::vector<color>>& image, object& obj, bool coordSystem, int resolution);
-
-point projectPointWithoutCamera(const point& targetPoint, int resolution);
-void initCoordSystemWithoutCamera(std::vector<std::vector<color>>& image);
-void renderWithoutCamera(std::vector<std::vector<color>>& image, object& obj, bool coordSystem, int resolution);
+void renderWithCamera(std::vector<std::vector<color>>& image, object& obj, bool coordSystem);
+void renderWithoutCamera(std::vector<std::vector<color>>& image, object& obj, bool coordSystem);
 
 #endif

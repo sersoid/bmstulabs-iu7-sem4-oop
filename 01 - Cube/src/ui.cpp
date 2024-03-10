@@ -69,12 +69,12 @@ void animationDisableWidgets(const Ui::mainWindow& mainUI, const bool isDisable)
 
 // Render
 
-std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<void(std::vector<std::vector<color>>&, object&, bool, int)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck) {
+std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<void(std::vector<std::vector<color>>&, object&, bool)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck) {
     return [&](object& obj) {
-        int resolution = resolutionSpinBox.value();
+        const int resolution = resolutionSpinBox.value();
 
         std::vector image(resolution, std::vector<color>(resolution));
-        const long long elapsedTimeCalculation = doWithElapsedTime(renderFunc, image, obj, coordSystemCheck.isChecked(), resolution);
+        const long long elapsedTimeCalculation = doWithElapsedTime(renderFunc, image, obj, coordSystemCheck.isChecked());
         const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, resultLabel, image);
 
         return updateTimeLabel(timeLabel, elapsedTimeCalculation, elapsedTimeRender);
