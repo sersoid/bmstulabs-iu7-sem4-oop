@@ -67,19 +67,21 @@ point projectPointWithCamera(const point& targetPoint, const point& cameraPoint,
     return projectedPoint;
 }
 
-int initCoordSystemWithCamera(std::vector<std::vector<color>>& image, const point& camera, const std::tuple<double, double, double>& dir) {
-    int rc = OK;
+std::vector<int> initCoordSystemWithCamera(std::vector<std::vector<color>>& image, const point& camera, const std::tuple<double, double, double>& dir) {
+    std::vector<int> rc;
     const int resolution = static_cast<int>(image.size());
 
-    rc |= drawLine(image, {projectPointWithCamera({-3, 0, 0}, camera, dir, resolution), projectPointWithCamera({3, 0, 0}, camera, dir, resolution)}, {255, 0 ,0});
-    rc |= drawLine(image, {projectPointWithCamera({0, -3, 0}, camera, dir, resolution), projectPointWithCamera({0, 3, 0}, camera, dir, resolution)}, {0, 255 ,0});
-    rc |= drawLine(image, {projectPointWithCamera({0, 0, -3}, camera, dir, resolution), projectPointWithCamera({0, 0, 3}, camera, dir, resolution)}, {0, 0 ,255});
+    rc.push_back(drawLine(image, {projectPointWithCamera({-3, 0, 0}, camera, dir, resolution), projectPointWithCamera({3, 0, 0}, camera, dir, resolution)}, {255, 0 ,0}));
+    rc.push_back(drawLine(image, {projectPointWithCamera({0, -3, 0}, camera, dir, resolution), projectPointWithCamera({0, 3, 0}, camera, dir, resolution)}, {0, 255 ,0}));
+    rc.push_back(drawLine(image, {projectPointWithCamera({0, 0, -3}, camera, dir, resolution), projectPointWithCamera({0, 0, 3}, camera, dir, resolution)}, {0, 0 ,255}));
 
     return rc;
 }
 
-int renderWithCamera(std::vector<std::vector<color>>& image, const object& obj, const bool coordSystem) {
-    int rc = OK;
+std::map<std::string, std::vector<int>> renderWithCamera(std::vector<std::vector<color>>& image, const object& obj, const bool coordSystem) {
+    std::map<std::string, std::vector<int>> rc;
+    std::vector<int> rcEdges;
+
     const int resolution = static_cast<int>(image.size());
     constexpr point cameraFocus = {CAMERA_TARGET_X, CAMERA_TARGET_Y, CAMERA_TARGET_Z}, camera = {CAMERA_X, CAMERA_Y, CAMERA_Z};
 
@@ -91,7 +93,7 @@ int renderWithCamera(std::vector<std::vector<color>>& image, const object& obj, 
     const std::tuple dir = {dirX / dirLength, dirY / dirLength, dirZ / dirLength};
 
     if (coordSystem)
-        initCoordSystemWithCamera(image, camera, dir);
+        rc["axis"] = initCoordSystemWithCamera(image, camera, dir);
 
     for (const edge targetEdge : obj.edges) {
         const edge projectedEdge = {
@@ -99,8 +101,10 @@ int renderWithCamera(std::vector<std::vector<color>>& image, const object& obj, 
             projectPointWithCamera(movePoint(rotatePoint(targetEdge.point2, obj.rotation), obj.center), camera, dir, resolution)
         };
 
-        rc |= drawLine(image, projectedEdge, {255, 255, 255});
+        rcEdges.push_back(drawLine(image, projectedEdge, {255, 255, 255}));
     }
+
+    rc["edges"] = rcEdges;
 
     return rc;
 }
@@ -116,22 +120,23 @@ point projectPointWithoutCamera(const point& targetPoint, const int resolution) 
     return projectedPoint;
 }
 
-int initCoordSystemWithoutCamera(std::vector<std::vector<color>>& image) {
-    int rc = OK;
+std::vector<int> initCoordSystemWithoutCamera(std::vector<std::vector<color>>& image) {
+    std::vector<int> rc;
     const int resolution = static_cast<int>(image.size());
 
-    rc |= drawLine(image, {projectPointWithoutCamera({-3, 0, 0}, resolution), projectPointWithoutCamera({3, 0, 0}, resolution)}, {255, 0, 0});
-    rc |= drawLine(image, {projectPointWithoutCamera({0, -3, 0}, resolution), projectPointWithoutCamera({0, 3, 0}, resolution)}, {0, 255, 0});
+    rc.push_back(drawLine(image, {projectPointWithoutCamera({-3, 0, 0}, resolution), projectPointWithoutCamera({3, 0, 0}, resolution)}, {255, 0, 0}));
+    rc.push_back(drawLine(image, {projectPointWithoutCamera({0, -3, 0}, resolution), projectPointWithoutCamera({0, 3, 0}, resolution)}, {0, 255, 0}));
 
     return rc;
 }
 
-int renderWithoutCamera(std::vector<std::vector<color>>& image, const object& obj, const bool coordSystem) {
-    int rc = OK;
+std::map<std::string, std::vector<int>> renderWithoutCamera(std::vector<std::vector<color>>& image, const object& obj, const bool coordSystem) {
+    std::map<std::string, std::vector<int>> rc;
+    std::vector<int> rcEdges;
     const int resolution = static_cast<int>(image.size());
 
     if (coordSystem)
-        initCoordSystemWithoutCamera(image);
+        rc["axis"] = initCoordSystemWithoutCamera(image);
 
     for (const edge targetEdge : obj.edges) {
         const edge projectedEdge = {
@@ -139,8 +144,10 @@ int renderWithoutCamera(std::vector<std::vector<color>>& image, const object& ob
             projectPointWithoutCamera(movePoint(rotatePoint(targetEdge.point2, obj.rotation), obj.center), resolution)
         };
 
-        rc |= drawLine(image, projectedEdge, {255, 255, 255});
+        rcEdges.push_back(drawLine(image, projectedEdge, {255, 255, 255}));
     }
+
+    rc["edges"] = rcEdges;
 
     return rc;
 }
