@@ -1,3 +1,6 @@
+#include <QMessageBox>
+
+#include "error.h"
 #include "object.h"
 #include "render.h"
 #include "ui.h"
@@ -60,12 +63,15 @@ int main(int argc, char* argv[]) {
     // Actions
 
     QObject::connect(mainUI.actionOpen, &QAction::triggered, [&] {
-        if (selectFileDialog(mainUI, obj) == 0) {
+        const int rc = selectFileDialog(mainUI, obj);
+
+        if (rc == OK) {
             mainUI.menuWidget->setDisabled(false);
 
             if (! mainUI.animationCheck->isChecked())
                 render(obj);
-        }
+        } else
+            QMessageBox::warning(mainUI.mainWidget, "Предупреждение", QString::fromStdString(printError(rc)));
     });
     QObject::connect(mainUI.actionAbout, &QAction::triggered, [&]{ aboutWidget.show(); });
 

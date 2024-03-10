@@ -20,7 +20,7 @@ void animationDisableWidgets(const Ui::mainWindow& mainUI, bool isDisable);
 
 // Render
 
-std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<void(std::vector<std::vector<color>>&, object&, bool, int)>& renderFunc, const QSpinBox& resolution, const QCheckBox& coordSystem);
+std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<void(std::vector<std::vector<color>>&, object&, bool, int)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck);
 
 // Actions
 

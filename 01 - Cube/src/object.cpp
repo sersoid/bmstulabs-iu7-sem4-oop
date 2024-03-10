@@ -2,12 +2,13 @@
 #include <fstream>
 #include <sstream>
 
+#include "error.h"
 #include "object.h"
 
 // Object
 
 int loadObject(const std::string& filePath, object& obj) {
-    int rc = 0; // OK
+    int rc = OK;
     std::ifstream file(filePath);
 
     if (file.is_open()) {
@@ -22,19 +23,19 @@ int loadObject(const std::string& filePath, object& obj) {
             double x1, y1, z1, x2, y2, z2;
 
             if (! (iss >> x1 >>  y1 >> z1 >> x2 >> y2 >> z2)) {
-                rc = 2; // FILE_FORMAT_ERROR
+                rc |= FILE_FORMAT_ERROR;
                 break;
             }
 
             objCopy.edges.push_back({{x1, y1, z1}, {x2, y2, z2}});
         }
 
-        if (rc == 0) // OK
+        if (rc == OK)
             obj = objCopy;
 
         file.close();
     } else
-        rc = 1; // FILE_OPEN_ERROR
+        rc |= FILE_OPEN_ERROR;
 
     return rc;
 }

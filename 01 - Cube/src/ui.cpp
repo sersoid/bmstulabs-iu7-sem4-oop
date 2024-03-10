@@ -1,5 +1,6 @@
 #include <QFileDialog>
 
+#include "error.h"
 #include "ui.h"
 #include "util.h"
 
@@ -83,13 +84,13 @@ std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLab
 // Actions
 
 int selectFileDialog(const Ui::mainWindow& mainUI, object& obj) {
-    int rc = 0; // OK
-    QString objFileName = QFileDialog::getOpenFileName(mainUI.mainWidget, "Файл объекта", "../data/");
+    int rc = OK;
+    const QString objFileName = QFileDialog::getOpenFileName(mainUI.mainWidget, "Файл объекта", "./");
 
     if (! objFileName.isEmpty())
-        loadObject(objFileName.toStdString(), obj);
+        rc |= loadObject(objFileName.toStdString(), obj);
     else
-        rc = 1; // Not existed file
+        rc |= FILE_DOESNT_EXIST;
 
     return rc;
 }
