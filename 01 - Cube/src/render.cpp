@@ -19,7 +19,7 @@ void drawLine(std::vector<std::vector<color>>& image, const edge& targetEdge, co
     int err = dx - dy;
     const int sx = x1 < x2 ? 1 : -1, sy = y1 < y2 ? 1 : -1;
 
-    do {
+    while ((x1 != x2 || y1 != y2) && ! (x1 < 0 && sx == -1 || x1 >= resolution && sx == 1 || y1 < 0 && sy == -1 || y1 >= resolution && sy == 1)) {
         if (x1 >= 0 && x1 < resolution && y1 >= 0 && y1 < resolution)
             image[x1][y1] = lineColor;
 
@@ -33,7 +33,10 @@ void drawLine(std::vector<std::vector<color>>& image, const edge& targetEdge, co
             err += dx;
             y1 += sy;
         }
-    } while ((x1 != x2 || y1 != y2) && ! (x1 < 0 && sx == -1 || x1 >= resolution && sx == 1 || y1 < 0 && sy == -1 || y1 >= resolution && sy == 1));
+    }
+
+    if (x1 >= 0 && x1 < resolution && y1 >= 0 && y1 < resolution)
+        image[x1][y1] = lineColor;
 }
 
 // Render with camera
