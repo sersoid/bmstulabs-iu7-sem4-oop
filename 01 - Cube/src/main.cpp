@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
             if (! mainUI.animationCheck->isChecked())
                 render(obj);
         } else
-            QMessageBox::warning(mainUI.mainWidget, "Предупреждение", QString::fromStdString(getErrorMessage(rc)));
+            QMessageBox::warning(mainUI.mainWidget, "Предупреждение", QString::fromStdString(printError(rc)));
     });
     QObject::connect(mainUI.actionAbout, &QAction::triggered, [&]{ aboutWidget.show(); });
 

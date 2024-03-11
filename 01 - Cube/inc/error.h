@@ -1,9 +1,7 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include <map>
 #include <string>
-#include <vector>
 
 #define OK 0
 
@@ -17,9 +15,6 @@
 
 #define EDGE_OUT_OF_VIEW 0b1000
 
-std::string getErrorMessage(int rc);
-#ifndef NDEBUG
-void printErrorDebug(const std::map<std::string, std::vector<int>>& rc);
-#endif
+std::string printError(int rc);
 
 #endif

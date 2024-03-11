@@ -1,7 +1,6 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <map>
 #include <vector>
 
 #include "object.h"
@@ -23,7 +22,7 @@ union color {
     unsigned char values[3] = {0, 0, 0};
 };
 
-std::map<std::string, std::vector<int>> renderWithCamera(std::vector<std::vector<color>>& image, const object& obj, bool coordSystem);
-std::map<std::string, std::vector<int>> renderWithoutCamera(std::vector<std::vector<color>>& image, const object& obj, bool coordSystem);
+int renderWithCamera(std::vector<std::vector<color>>& image, const object& obj, bool coordSystem);
+int renderWithoutCamera(std::vector<std::vector<color>>& image, const object& obj, bool coordSystem);
 
 #endif

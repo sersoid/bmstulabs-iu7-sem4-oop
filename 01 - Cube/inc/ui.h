@@ -20,7 +20,7 @@ void animationDisableWidgets(const Ui::mainWindow& mainUI, bool isDisable);
 
 // Render
 
-std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<std::map<std::string, std::vector<int>>(std::vector<std::vector<color>>&, object&, bool)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck);
+std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<void(std::vector<std::vector<color>>&, object&, bool)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck);
 
 // Actions
 
@@ -29,10 +29,6 @@ int selectFileDialog(const Ui::mainWindow& mainUI, object& obj);
 // Result
 
 void updateQLabelByImage(QLabel& resultLabel, const std::vector<std::vector<color>>& image);
-#ifndef NDEBUG
-long long updateTimeLabel(QLabel& timeLabel, long long elapsedTimeCalculation, long long elapsedTimeRender, long long elapsedTimeDebugPrint);
-#else
 long long updateTimeLabel(QLabel& timeLabel, long long elapsedTimeCalculation, long long elapsedTimeRender);
-#endif
 
 #endif

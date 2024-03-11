@@ -18,7 +18,7 @@ void syncObjectAndDoubleSpinBox(double& targetObjValue, const QDoubleSpinBox& do
 // Animation
 
 void initAnimationThread(const QThread& animationThread, const std::function<long long(object&)>& render, object& obj, const QSpinBox& FPSSpinBox) {
-    const point center = obj.center, rotation = obj.rotation;
+    point center = obj.center, rotation = obj.rotation;
 
     while (! animationThread.isInterruptionRequested()) {
         const int FPSLimit = FPSSpinBox.value();
@@ -69,21 +69,15 @@ void animationDisableWidgets(const Ui::mainWindow& mainUI, const bool isDisable)
 
 // Render
 
-std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<std::map<std::string, std::vector<int>>(std::vector<std::vector<color>>&, object&, bool)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck) {
+std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<void(std::vector<std::vector<color>>&, object&, bool)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck) {
     return [&](object& obj) {
-        std::map<std::string, std::vector<int>> rc;
         const int resolution = resolutionSpinBox.value();
 
         std::vector image(resolution, std::vector<color>(resolution));
-        const long long elapsedTimeCalculation = doWithElapsedTime(renderFunc, rc, image, obj, coordSystemCheck.isChecked());
-        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, static_cast<void *>(nullptr), resultLabel, image);
+        const long long elapsedTimeCalculation = doWithElapsedTime(renderFunc, image, obj, coordSystemCheck.isChecked());
+        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, resultLabel, image);
 
-#ifndef NDEBUG
-        const long long elapsedTimeDebugPrint = doWithElapsedTime(printErrorDebug, static_cast<void *>(nullptr), rc);
-        return updateTimeLabel(timeLabel, elapsedTimeCalculation, elapsedTimeRender, elapsedTimeDebugPrint);
-#else
         return updateTimeLabel(timeLabel, elapsedTimeCalculation, elapsedTimeRender);
-#endif
     };
 }
 
@@ -117,16 +111,8 @@ void updateQLabelByImage(QLabel& resultLabel, const std::vector<std::vector<colo
     delete[] buffer;
 }
 
-#ifndef NDEBUG
-long long updateTimeLabel(QLabel& timeLabel, const long long elapsedTimeCalculation, const long long elapsedTimeRender, const long long elapsedTimeDebugPrint) {
-    timeLabel.setText("Вычисление: " + QString::number(elapsedTimeCalculation) + " мс | Отрисовка: " + QString::number(elapsedTimeRender) + " мс | Отладка: " + QString::number(elapsedTimeDebugPrint) + " мс");
-
-    return elapsedTimeCalculation + elapsedTimeRender;
-}
-#else
 long long updateTimeLabel(QLabel& timeLabel, const long long elapsedTimeCalculation, const long long elapsedTimeRender) {
     timeLabel.setText("Вычисление: " + QString::number(elapsedTimeCalculation) + " мс | Отрисовка: " + QString::number(elapsedTimeRender) + " мс");
 
     return elapsedTimeCalculation + elapsedTimeRender;
 }
-#endif

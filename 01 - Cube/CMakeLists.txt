@@ -12,50 +12,22 @@ set(OUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/out)
 file(GLOB SRC_FILES ${SRC_DIR}/*.cpp)
 file(GLOB UI_FILES ${UI_DIR}/*.ui)
 
-#DEBUG
-
-qt_add_executable(${ProjectId}_Debug
+qt_add_executable(${ProjectId}
         ${SRC_FILES}
         ${UI_FILES}
 )
 
-target_include_directories(${ProjectId}_Debug PRIVATE
+target_include_directories(${ProjectId} PRIVATE
         ${INC_DIR}
 )
 
-target_link_libraries(${ProjectId}_Debug PUBLIC
+target_link_libraries(${ProjectId} PUBLIC
         Qt6::Core
         Qt6::Gui
         Qt6::Widgets
 )
 
-set_target_properties(${ProjectId}_Debug PROPERTIES
+set_target_properties(${ProjectId} PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY ${OUT_DIR}
         WIN32_EXECUTABLE TRUE
 )
-
-target_compile_options(${ProjectId}_Debug PUBLIC -g -DDEBUG -O0)
-
-#RELEASE
-
-qt_add_executable(${ProjectId}_Release
-        ${SRC_FILES}
-        ${UI_FILES}
-)
-
-target_include_directories(${ProjectId}_Release PRIVATE
-        ${INC_DIR}
-)
-
-target_link_libraries(${ProjectId}_Release PUBLIC
-        Qt6::Core
-        Qt6::Gui
-        Qt6::Widgets
-)
-
-set_target_properties(${ProjectId}_Release PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY ${OUT_DIR}
-        WIN32_EXECUTABLE TRUE
-)
-
-target_compile_options(${ProjectId}_Release PUBLIC -DNDEBUG)
