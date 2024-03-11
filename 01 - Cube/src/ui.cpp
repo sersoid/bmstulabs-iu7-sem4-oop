@@ -71,15 +71,20 @@ void animationDisableWidgets(const Ui::mainWindow& mainUI, const bool isDisable)
 
 std::function<long long(object&)> renderWithTimeUpdate(QLabel& resultLabel, QLabel& timeLabel, const std::function<std::map<std::string, std::vector<int>>(std::vector<std::vector<color>>&, object&, bool)>& renderFunc, const QSpinBox& resolutionSpinBox, const QCheckBox& coordSystemCheck) {
     return [&](object& obj) {
-        std::map<std::string, std::vector<int>> rc;
         const int resolution = resolutionSpinBox.value();
-
         std::vector image(resolution, std::vector<color>(resolution));
-        const long long elapsedTimeCalculation = doWithElapsedTime(renderFunc, rc, image, obj, coordSystemCheck.isChecked());
-        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, static_cast<void *>(nullptr), resultLabel, image);
 
 #ifndef NDEBUG
-        const long long elapsedTimeDebugPrint = doWithElapsedTime(printErrorDebug, static_cast<void *>(nullptr), rc);
+        std::map<std::string, std::vector<int>> rc;
+        const long long elapsedTimeCalculation = doWithElapsedTime(renderFunc, rc, image, obj, coordSystemCheck.isChecked());
+        const long long elapsedTimeDebugPrint = doWithElapsedTime(printErrorDebug, static_cast<void*>(nullptr), rc);
+#else
+        const long long elapsedTimeCalculation = doWithElapsedTime(renderFunc, static_cast<void*>(nullptr), image, obj, coordSystemCheck.isChecked());
+#endif
+
+        const long long elapsedTimeRender = doWithElapsedTime(updateQLabelByImage, static_cast<void*>(nullptr), resultLabel, image);
+
+#ifndef NDEBUG
         return updateTimeLabel(timeLabel, elapsedTimeCalculation, elapsedTimeRender, elapsedTimeDebugPrint);
 #else
         return updateTimeLabel(timeLabel, elapsedTimeCalculation, elapsedTimeRender);
