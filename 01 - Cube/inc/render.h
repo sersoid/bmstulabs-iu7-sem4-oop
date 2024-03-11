@@ -22,7 +22,7 @@ union color {
     unsigned char values[3] = {0, 0, 0};
 };
 
-int renderWithCamera(std::vector<std::vector<color>>& image, const object& obj, bool coordSystem);
-int renderWithoutCamera(std::vector<std::vector<color>>& image, const object& obj, bool coordSystem);
+void renderWithCamera(std::vector<std::vector<color>>& image, object& obj, bool coordSystem);
+void renderWithoutCamera(std::vector<std::vector<color>>& image, object& obj, bool coordSystem);
 
 #endif
